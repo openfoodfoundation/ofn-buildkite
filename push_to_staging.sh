@@ -12,11 +12,10 @@ if ! master_merged; then
     else
         git push origin "HEAD:$BUILDKITE_BRANCH"
     fi
+    buildkite-agent meta-data set "buildkite:git:commit" "`git show HEAD -s --format=fuller --no-color`"
 fi
 
 set_ofn_commit "$(git rev-parse HEAD)"
-
-buildkite-agent meta-data set "buildkite:git:commit" "`git show HEAD -s --format=fuller --no-color`"
 
 STAGING_REMOTE="${STAGING_REMOTE:-$STAGING_SSH_HOST:$STAGING_CURRENT_PATH}"
 
