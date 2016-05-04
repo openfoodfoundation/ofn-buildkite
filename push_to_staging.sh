@@ -6,7 +6,7 @@ source "`dirname $0`/includes.sh"
 test "$(github_status)" = "success"
 
 if ! master_merged; then
-    git merge origin/master
+    git merge origin/master --no-edit
     if [ -n "$BUILDKITE_PULL_REQUEST" ]; then
         git push --force origin "HEAD:refs/heads/merged-pull/$BUILDKITE_PULL_REQUEST"
     else
