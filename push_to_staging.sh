@@ -13,6 +13,7 @@ if ! master_merged; then
         git push origin "HEAD:$BUILDKITE_BRANCH"
     fi
     buildkite-agent meta-data set "buildkite:git:commit" "`git show HEAD -s --format=fuller --no-color`"
+    buildkite-agent meta-data set "buildkite:git:branch" "`git branch --contains HEAD --no-color`"
 fi
 
 set_ofn_commit "$(git rev-parse HEAD)"
