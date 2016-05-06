@@ -5,6 +5,8 @@ source "`dirname $0`/includes.sh"
 
 OFN_COMMIT="$(get_ofn_commit)"
 git checkout -qf "$OFN_COMMIT"
+buildkite-agent meta-data set "buildkite:git:commit" "`git show HEAD -s --format=fuller --no-color`"
+buildkite-agent meta-data set "buildkite:git:branch" "`git branch --contains HEAD --no-color`"
 
 test "$(github_status)" = "success"
 master_merged
