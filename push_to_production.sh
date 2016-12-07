@@ -18,9 +18,18 @@ echo "--- Saving baseline data for staging"
 VARS="CURRENT_PATH='$STAGING_CURRENT_PATH' SERVICE='$STAGING_SERVICE' DB_HOST='$STAGING_DB_HOST' DB_USER='$STAGING_DB_USER' DB='$STAGING_DB'"
 ssh "$STAGING_SSH_HOST" "$VARS $STAGING_CURRENT_PATH/script/ci/save_staging_baseline.sh $OFN_COMMIT"
 
-echo "--- Pushing to production"
-git push origin "$OFN_COMMIT:master"
+# Only the Australian team is pushing to the global master branch.
+# We are the gate keepers for now.
+#
+# It will trigger Travis to run again so that `github_status` will return
+# "pending" instead of "success" for a while. That's why I kept it in one
+# script.
+if [ "$PUSH_TO_ORIGIN_MASTER" = "true" ]; then
+    echo "--- Pushing to origin/master"
+    git push origin "$OFN_COMMIT:master"
+fi
 
+echo "--- Pushing to production"
 exec 5>&1
 OUTPUT=$(git push "$PRODUCTION_REMOTE" "$OFN_COMMIT":master --force 2>&1 |tee /dev/fd/5)
 [[ $OUTPUT =~ "Done" ]]
