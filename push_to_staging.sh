@@ -7,7 +7,7 @@ test "$(github_status)" = "success"
 
 if ! master_merged; then
     git merge origin/master --no-edit
-    if [ -n "$BUILDKITE_PULL_REQUEST" ]; then
+    if [ -n "$BUILDKITE_PULL_REQUEST" -a "$BUILDKITE_PULL_REQUEST" != "false" ]; then
         git push --force origin "HEAD:refs/heads/merged-pull/$BUILDKITE_PULL_REQUEST"
     else
         git push origin "HEAD:$BUILDKITE_BRANCH"
