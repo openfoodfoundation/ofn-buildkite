@@ -33,4 +33,4 @@ ssh "$STAGING_SSH_HOST" "$VARS $STAGING_CURRENT_PATH/script/ci/load_staging_base
 echo "--- Pushing to staging"
 exec 5>&1
 OUTPUT="$(git push "$STAGING_REMOTE" HEAD:master --force 2>&1 |tee /dev/fd/5)"
-[[ $OUTPUT =~ "Done" ]]
+[[ $OUTPUT =~ "Done" -o $OUTPUT =~ "Everything up-to-date" ]]
