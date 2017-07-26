@@ -3,7 +3,7 @@
 set -exo pipefail
 source "`dirname $0`/includes.sh"
 
-test "$(github_status)" = "success"
+test "$(github_status)" = "success" -o "$(github_status)" = "pending"
 
 if ! master_merged; then
     git merge origin/master --no-edit
