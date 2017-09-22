@@ -5,16 +5,7 @@ source "`dirname $0`/includes.sh"
 
 test "$(github_status)" = "success" -o "$(github_status)" = "pending"
 
-if ! master_merged; then
-    git merge origin/master --no-edit
-    if [ -n "$BUILDKITE_PULL_REQUEST" -a "$BUILDKITE_PULL_REQUEST" != "false" ]; then
-        git push --force origin "HEAD:refs/heads/merged-pull/$BUILDKITE_PULL_REQUEST"
-    else
-        git push origin "HEAD:$BUILDKITE_BRANCH"
-    fi
-    buildkite-agent meta-data set "buildkite:git:commit" "`git show HEAD -s --format=fuller --no-color`"
-    buildkite-agent meta-data set "buildkite:git:branch" "`git branch --contains HEAD --no-color`"
-fi
+exit_unless_master_merged
 
 set_ofn_commit "$(git rev-parse HEAD)"
 
