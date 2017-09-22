@@ -20,6 +20,13 @@ function master_merged {
     git branch -r --merged HEAD | grep -Fxq '  origin/master'
 }
 
+function exit_unless_merged_into_master {
+  if ! [ `git merge-base HEAD origin/master` = $OFN_COMMIT ]; then
+    echo "This branch is not yet merged into master. Please merge in GitHub first."
+    exit 1
+  fi
+}
+
 function exit_unless_master_merged {
     if ! master_merged; then
 	echo "This branch does not have the current master merged. Please merge master and push again."
